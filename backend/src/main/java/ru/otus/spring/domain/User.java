@@ -41,8 +41,7 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    //    private String role;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
