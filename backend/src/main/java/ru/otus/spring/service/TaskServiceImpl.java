@@ -9,6 +9,7 @@ import ru.otus.spring.domain.User;
 import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.request.TaskRequestInsertDto;
 import ru.otus.spring.dto.request.TaskRequestUpdateDto;
+import ru.otus.spring.dto.response.TaskFullResponseDto;
 import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.repository.TaskRepository;
 
@@ -28,9 +29,10 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper mapper;
 
     @Override
-    public Optional<TaskResponseDto> findById(long id) {
+    public TaskFullResponseDto findById(long id) {
         return taskRepository.findById(id)
-                .map(mapper::toDto);
+                .map(mapper::toFullDto)
+                .orElseThrow();
     }
 
     @Override

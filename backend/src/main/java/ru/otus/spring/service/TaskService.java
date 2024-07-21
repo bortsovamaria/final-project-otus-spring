@@ -1,14 +1,14 @@
 package ru.otus.spring.service;
 
-import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.dto.request.TaskRequestInsertDto;
 import ru.otus.spring.dto.request.TaskRequestUpdateDto;
+import ru.otus.spring.dto.response.TaskFullResponseDto;
+import ru.otus.spring.dto.response.TaskResponseDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskService {
-    Optional<TaskResponseDto> findById(long id);
+    TaskFullResponseDto findById(long id);
 
     List<TaskResponseDto> findAll();
 

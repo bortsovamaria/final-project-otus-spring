@@ -5,10 +5,11 @@ import lombok.Getter;
 import ru.otus.spring.domain.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class TaskResponseDto {
+public class TaskFullResponseDto {
     private long id;
 
     private String title;
@@ -24,4 +25,6 @@ public class TaskResponseDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private List<CommentResponseDto> comments;
 }
