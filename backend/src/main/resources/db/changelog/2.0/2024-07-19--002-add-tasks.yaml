@@ -40,7 +40,7 @@ databaseChangeLog:
                     references: users(id)
               - column:
                   name: created_at
-                  type: varchar(255)
+                  type: timestamp
               - column:
                   name: updated_at
-                  type: varchar(255)
+                  type: timestamp

@@ -25,7 +25,7 @@ public class SecurityConfig {
                         authorize
                                 .requestMatchers("/login").permitAll()
                                 .anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults());
         return httpSecurity.build();
     }
 
