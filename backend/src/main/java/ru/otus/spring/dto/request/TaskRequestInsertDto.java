@@ -8,6 +8,10 @@ public class TaskRequestInsertDto {
 
     private String description;
 
+    private Long status;
+
+    private Long priority;
+
     private Long createdBy;
 
     private Long updatedBy;

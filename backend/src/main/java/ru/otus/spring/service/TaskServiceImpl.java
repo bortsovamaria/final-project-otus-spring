@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.domain.Task;
-import ru.otus.spring.domain.User;
+import ru.otus.spring.domain.*;
 import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.request.TaskRequestInsertDto;
 import ru.otus.spring.dto.request.TaskRequestUpdateDto;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
 import ru.otus.spring.dto.response.TaskResponseDto;
+import ru.otus.spring.repository.PriorityRepository;
+import ru.otus.spring.repository.StatusRepository;
 import ru.otus.spring.repository.TaskRepository;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,10 @@ public class TaskServiceImpl implements TaskService {
     private final UserService userService;
 
     private final TaskMapper mapper;
+
+    private final StatusRepository statusRepository;
+
+    private final PriorityRepository priorityRepository;
 
     @Override
     public TaskFullResponseDto findById(long id) {
@@ -47,6 +52,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto insert(TaskRequestInsertDto taskRequestInsertDto) {
         User currentUser = userService.getCurrentUser();
         User assignedTo = userService.findById(taskRequestInsertDto.getAssignedTo());
+        Status status = statusRepository.findById(taskRequestInsertDto.getStatus()).orElseThrow();
+        Priority priority = priorityRepository.findById(taskRequestInsertDto.getPriority()).orElseThrow();
         Task task = Task.builder()
                 .title(taskRequestInsertDto.getTitle())
                 .description(taskRequestInsertDto.getDescription())
@@ -55,6 +62,8 @@ public class TaskServiceImpl implements TaskService {
                 .assignedTo(assignedTo)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .status(status)
+                .priority(priority)
                 .build();
         return mapper.toDto(taskRepository.save(task));
     }
@@ -66,6 +75,8 @@ public class TaskServiceImpl implements TaskService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User currentUser = userService.findByUsername(authentication.getName());
             User assignedTo = userService.findById(taskRequestUpdateDto.getAssignedTo());
+            Status status = statusRepository.findById(taskRequestUpdateDto.getStatus().getId()).orElseThrow();
+            Priority priority = priorityRepository.findById(taskRequestUpdateDto.getPriority().getId()).orElseThrow();
             Task task = taskOpt.get();
             if (!isEmpty(taskRequestUpdateDto.getTitle())) {
                 task.setTitle(taskRequestUpdateDto.getTitle());
@@ -75,6 +86,12 @@ public class TaskServiceImpl implements TaskService {
             }
             if (!isEmpty(taskRequestUpdateDto.getAssignedTo())) {
                 task.setAssignedTo(assignedTo);
+            }
+            if (!isEmpty(taskRequestUpdateDto.getStatus())) {
+                task.setStatus(status);
+            }
+            if (!isEmpty(taskRequestUpdateDto.getPriority())) {
+                task.setPriority(priority);
             }
             task.setUpdatedBy(currentUser);
             task.setUpdatedAt(LocalDateTime.now());

@@ -2,6 +2,8 @@ package ru.otus.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ru.otus.spring.domain.Priority;
+import ru.otus.spring.domain.Status;
 import ru.otus.spring.domain.User;
 
 import java.time.LocalDateTime;
@@ -14,6 +16,10 @@ public class TaskResponseDto {
     private String title;
 
     private String description;
+
+    private Status status;
+
+    private Priority priority;
 
     private User createdBy;
 

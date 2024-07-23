@@ -9,6 +9,6 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Override
-    @EntityGraph(attributePaths = {"createdBy", "updatedBy", "assignedTo"})
+    @EntityGraph(attributePaths = {"createdBy", "updatedBy", "assignedTo", "status", "priority"})
     List<Task> findAll();
 }

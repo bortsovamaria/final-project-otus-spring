@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-23--001-add-statuses
+      author: mbortsova
+      changes:
+        - createTable:
+            tableName: statuses
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_status
+              - column:
+                  name: name
+                  type: varchar(255)
+
+  - changeSet:
+      id: 2024-07-23--001-add-priorities
+      author: mbortsova
+      changes:
+        - createTable:
+            tableName: priorities
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_priority
+              - column:
+                  name: name
+                  type: varchar(255)
+
+  - changeSet:
+      id: 2024-07-23--001-add-statuses_priorities-tasks
+      author: mbortsova
+      changes:
+        - addColumn:
+            tableName: tasks
+            columns:
+              - column:
+                  name: status_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_status
+                    references: statuses(id)
+              - column:
+                  name: priority_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_priority
+                    references: priorities(id)

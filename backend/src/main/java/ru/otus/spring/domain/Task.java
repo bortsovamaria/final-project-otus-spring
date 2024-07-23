@@ -27,6 +27,14 @@ public class Task {
     @Column(name = "description")
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private Status status;
+
+    @ManyToOne
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
+
     @JoinColumn(name = "created_by")
     @ManyToOne
     private User createdBy;
