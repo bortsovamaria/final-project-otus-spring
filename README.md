@@ -32,12 +32,11 @@
     - Comment
     - Priority
     - Status
-    - Type
     - Attachment
     - Role
     - User
 
-![](D:\code\final-project-otus-spring\architecture_db.PNG)
+![architecture_db](architecture_db.PNG)
 
 API:
 
