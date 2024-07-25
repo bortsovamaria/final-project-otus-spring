@@ -1,17 +1,16 @@
 package ru.otus.spring.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Task;
-import ru.otus.spring.dto.request.CommentRequestDto;
+import ru.otus.spring.dto.request.CommentCreateRequestDto;
+import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
 import ru.otus.spring.dto.mapper.CommentMapper;
 import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
-import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.repository.CommentRepository;
 
 import java.util.List;
@@ -30,8 +29,10 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public Optional<CommentResponseDto> findById(long id) {
-        return commentRepository.findById(id).map(commentMapper::toDTO);
+    public CommentResponseDto findById(long id) {
+        return commentRepository.findById(id)
+                .map(commentMapper::toDTO)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     @Override
@@ -42,10 +43,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentResponseDto insert(CommentRequestDto commentRequestDto) {
-        Task task = taskMapper.toFullDomain(taskService.findById(commentRequestDto.getTaskId()));
+    public CommentResponseDto insert(CommentCreateRequestDto commentCreateRequestDto) {
+        Task task = taskMapper.toFullDomain(taskService.findById(commentCreateRequestDto.getTaskId()));
         Comment comment = Comment.builder()
-                .text(commentRequestDto.getText())
+                .text(commentCreateRequestDto.getText())
                 .task(task)
                 .build();
         return commentMapper.toDTO(commentRepository.save(comment));
@@ -53,11 +54,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentResponseDto update(CommentRequestDto commentRequestDto) {
-        Optional<Comment> commentOpt = commentRepository.findById(commentRequestDto.getTaskId());
+    public CommentResponseDto update(CommentUpdateRequestDto commentUpdateRequestDto) {
+        Optional<Comment> commentOpt = commentRepository.findById(commentUpdateRequestDto.getId());
         if (commentOpt.isPresent()) {
             Comment comment = commentOpt.get();
-            comment.setText(commentRequestDto.getText());
+            comment.setText(commentUpdateRequestDto.getText());
             return commentMapper.toDTO(commentRepository.save(comment));
         }
         throw new IllegalArgumentException();

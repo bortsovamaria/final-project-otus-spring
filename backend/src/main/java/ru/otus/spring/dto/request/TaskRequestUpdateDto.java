@@ -14,7 +14,5 @@ public class TaskRequestUpdateDto {
 
     private Priority priority;
 
-    private Long updatedBy;
-
     private Long assignedTo;
 }

@@ -1,6 +1,7 @@
 package ru.otus.spring.service;
 
-import ru.otus.spring.dto.request.CommentRequestDto;
+import ru.otus.spring.dto.request.CommentCreateRequestDto;
+import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
 
 import java.util.List;
@@ -8,13 +9,13 @@ import java.util.Optional;
 
 public interface CommentService {
 
-    Optional<CommentResponseDto> findById(long id);
+    CommentResponseDto findById(long id);
 
     List<CommentResponseDto> findByTaskId(long taskId);
 
-    CommentResponseDto insert(CommentRequestDto commentRequestDto);
+    CommentResponseDto insert(CommentCreateRequestDto commentCreateRequestDto);
 
-    CommentResponseDto update(CommentRequestDto commentRequestDto);
+    CommentResponseDto update(CommentUpdateRequestDto commentUpdateRequestDto);
 
     void deleteById(long id);
 }

@@ -1,13 +1,11 @@
 package ru.otus.spring.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.spring.dto.mapper.CommentMapper;
-import ru.otus.spring.dto.request.CommentRequestDto;
+import ru.otus.spring.dto.request.CommentCreateRequestDto;
+import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
-import ru.otus.spring.dto.request.TaskRequestInsertDto;
-import ru.otus.spring.dto.request.TaskRequestUpdateDto;
-import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.service.CommentService;
 
 import java.util.List;
@@ -20,22 +18,22 @@ public class CommentController {
 
     @GetMapping("/api/comments/{id}")
     public CommentResponseDto getCommentById(@PathVariable long id) {
-        return commentService.findById(id).orElseThrow();
+        return commentService.findById(id);
     }
 
-    @GetMapping("/api/comments")
-    public List<CommentResponseDto> getCommentsByTaskId(@RequestParam long taskId) {
-        return commentService.findByTaskId(taskId);
+    @GetMapping("/api/comments/task")
+    public List<CommentResponseDto> getCommentsByTaskId(@RequestParam long id) {
+        return commentService.findByTaskId(id);
     }
 
     @PostMapping("/api/comments")
-    public CommentResponseDto insertComment(@RequestBody CommentRequestDto commentRequestDto) {
+    public CommentResponseDto insertComment(@RequestBody @Valid CommentCreateRequestDto commentRequestDto) {
         return commentService.insert(commentRequestDto);
     }
 
     @PatchMapping("/api/comments")
-    public CommentResponseDto updateComment(@RequestBody CommentRequestDto commentRequestDto) {
-        return commentService.update(commentRequestDto);
+    public CommentResponseDto updateComment(@RequestBody @Valid CommentUpdateRequestDto commentUpdateRequestDto) {
+        return commentService.update(commentUpdateRequestDto);
     }
 
     @DeleteMapping("/api/comments/{id}")
