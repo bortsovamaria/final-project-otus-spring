@@ -105,4 +105,49 @@ public class TaskServiceImpl implements TaskService {
     public void deleteById(long id) {
         taskRepository.deleteById(id);
     }
+
+    @Override
+    public List<TaskResponseDto> findAllByAssignedToId(Long assignedToId) {
+        User assignedTo = userService.findById(assignedToId);
+        return taskRepository.findByAssignedTo(assignedTo)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<TaskResponseDto> findAllByCreatedById(Long createdById) {
+        User assignedTo = userService.findById(createdById);
+        return taskRepository.findByCreatedBy(assignedTo)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<TaskResponseDto> findAllByUpdatedById(Long updatedById) {
+        User updatedBy = userService.findById(updatedById);
+        return taskRepository.findByUpdatedBy(updatedBy)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<TaskResponseDto> findAllTasksByPriority(Long priorityId) {
+        Priority priority = priorityRepository.findById(priorityId).orElseThrow();
+        return taskRepository.findTasksByPriority(priority)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<TaskResponseDto> findAllTasksByStatus(Long id) {
+        Status status = statusRepository.findById(id).orElseThrow();
+        return taskRepository.findTasksByStatus(status)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
 }

@@ -12,6 +12,16 @@ public interface TaskService {
 
     List<TaskResponseDto> findAll();
 
+    List<TaskResponseDto> findAllByAssignedToId(Long assignedToId);
+
+    List<TaskResponseDto> findAllByCreatedById(Long createdById);
+
+    List<TaskResponseDto> findAllByUpdatedById(Long updatedById);
+
+    List<TaskResponseDto> findAllTasksByPriority(Long priorityId);
+
+    List<TaskResponseDto> findAllTasksByStatus(Long statusId);
+
     TaskResponseDto insert(TaskRequestInsertDto taskRequestInsertDto);
 
     TaskResponseDto update(long id, TaskRequestUpdateDto taskRequestUpdateDto);
