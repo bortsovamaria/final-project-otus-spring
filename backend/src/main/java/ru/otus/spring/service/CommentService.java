@@ -5,7 +5,6 @@ import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CommentService {
 
