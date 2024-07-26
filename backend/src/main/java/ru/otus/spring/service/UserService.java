@@ -13,4 +13,6 @@ public interface UserService extends UserDetailsService {
     User findById(long id);
 
     User findByUsername(String username);
+
+    void create(User user);
 }

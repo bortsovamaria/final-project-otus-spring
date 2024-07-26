@@ -49,4 +49,17 @@ public class UserServiceImpl implements UserService {
                 .roles(String.valueOf(user.getRoles()))
                 .build();
     }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public void create(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            // Заменить на свои исключения
+            throw new RuntimeException("Пользователь с таким именем уже существует");
+        }
+
+        save(user);
+    }
 }
