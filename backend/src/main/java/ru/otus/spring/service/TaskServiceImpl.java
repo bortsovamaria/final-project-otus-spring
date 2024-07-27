@@ -1,5 +1,6 @@
 package ru.otus.spring.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskFullResponseDto findById(long id) {
         return taskRepository.findById(id)
                 .map(mapper::toFullDto)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
     }
 
     @Override
@@ -52,8 +53,12 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto insert(TaskRequestInsertDto taskRequestInsertDto) {
         User currentUser = userService.getCurrentUser();
         User assignedTo = userService.findById(taskRequestInsertDto.getAssignedTo());
-        Status status = statusRepository.findById(taskRequestInsertDto.getStatus()).orElseThrow();
-        Priority priority = priorityRepository.findById(taskRequestInsertDto.getPriority()).orElseThrow();
+        Status status = statusRepository.findById(taskRequestInsertDto.getStatus())
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Status with id " + taskRequestInsertDto.getStatus() + " not found"));
+        Priority priority = priorityRepository.findById(taskRequestInsertDto.getPriority())
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Priority with id " + taskRequestInsertDto.getStatus() + " not found"));
         Task task = Task.builder()
                 .title(taskRequestInsertDto.getTitle())
                 .description(taskRequestInsertDto.getDescription())
@@ -75,8 +80,12 @@ public class TaskServiceImpl implements TaskService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User currentUser = userService.findByUsername(authentication.getName());
             User assignedTo = userService.findById(taskRequestUpdateDto.getAssignedTo());
-            Status status = statusRepository.findById(taskRequestUpdateDto.getStatus().getId()).orElseThrow();
-            Priority priority = priorityRepository.findById(taskRequestUpdateDto.getPriority().getId()).orElseThrow();
+            Status status = statusRepository.findById(taskRequestUpdateDto.getStatus().getId())
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Status with id " + taskRequestUpdateDto.getStatus() + " not found"));
+            Priority priority = priorityRepository.findById(taskRequestUpdateDto.getPriority().getId())
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Priority with id " + taskRequestUpdateDto.getStatus() + " not found"));
             Task task = taskOpt.get();
             if (!isEmpty(taskRequestUpdateDto.getTitle())) {
                 task.setTitle(taskRequestUpdateDto.getTitle());

@@ -5,11 +5,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.spring.dto.response.TaskFullResponseDto;
-import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.dto.request.TaskRequestInsertDto;
 import ru.otus.spring.dto.request.TaskRequestUpdateDto;
+import ru.otus.spring.dto.response.TaskFullResponseDto;
+import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.service.TaskService;
 
 import java.util.List;
@@ -22,61 +24,62 @@ public class TaskController {
 
     @Operation(summary = "Получить весь список задач")
     @GetMapping("/api/tasks")
-    public List<TaskResponseDto> getAllTasks() {
-        return taskService.findAll();
+    public ResponseEntity<List<TaskResponseDto>> getAllTasks() {
+        return new ResponseEntity<>(taskService.findAll(), HttpStatus.OK);
     }
 
     @Operation(summary = "Получить задачу по ID")
     @GetMapping("/api/tasks/{id}")
-    public TaskFullResponseDto getTaskById(@PathVariable @Min(1) Long id) {
-        return taskService.findById(id);
+    public ResponseEntity<TaskFullResponseDto> getTaskById(@PathVariable @Min(1) Long id) {
+        return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Добавить комментарий")
     @PostMapping("/api/tasks")
-    public TaskResponseDto insertTask(@Valid @RequestBody TaskRequestInsertDto taskRequestInsertDto) {
-        return taskService.insert(taskRequestInsertDto);
+    public ResponseEntity<TaskResponseDto> insertTask(@Valid @RequestBody TaskRequestInsertDto taskRequestInsertDto) {
+        return new ResponseEntity<>(taskService.insert(taskRequestInsertDto), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Редактировать задачу по ID")
     @PatchMapping("/api/tasks/{id}")
-    public TaskResponseDto updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequestUpdateDto taskRequestUpdateDto) {
-        return taskService.update(id, taskRequestUpdateDto);
+    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequestUpdateDto taskRequestUpdateDto) {
+        return new ResponseEntity<>(taskService.update(id, taskRequestUpdateDto), HttpStatus.OK);
     }
 
     @Operation(summary = "Удалить задачу по ID")
     @DeleteMapping("/api/tasks/{id}")
-    public void deleteTaskById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
         taskService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список задач по ID статуса")
     @GetMapping("/api/tasks/assigned")
-    public List<TaskResponseDto> getAllTasksByAssignedTo(@RequestParam @Min(1) Long id) {
-        return taskService.findAllByAssignedToId(id);
+    public ResponseEntity<List<TaskResponseDto>> getAllTasksByAssignedTo(@RequestParam @Min(1) Long id) {
+        return new ResponseEntity<>(taskService.findAllByAssignedToId(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список задач по ID пользователя, создавшего задачи")
     @GetMapping("/api/tasks/createdby")
-    public List<TaskResponseDto> getAllTasksByCreatedBy(@RequestParam @Min(1) Long id) {
-        return taskService.findAllByCreatedById(id);
+    public ResponseEntity<List<TaskResponseDto>> getAllTasksByCreatedBy(@RequestParam @Min(1) Long id) {
+        return new ResponseEntity<>(taskService.findAllByCreatedById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список задач по ID пользователя, который модифицировал задачи")
     @GetMapping("/api/tasks/updatedby")
-    public List<TaskResponseDto> getAllTasksByUpdatedBy(@RequestParam @Min(1) Long id) {
-        return taskService.findAllByUpdatedById(id);
+    public ResponseEntity<List<TaskResponseDto>> getAllTasksByUpdatedBy(@RequestParam @Min(1) Long id) {
+        return new ResponseEntity<>(taskService.findAllByUpdatedById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список задач по ID приоритета")
     @GetMapping("/api/tasks/priority")
-    public List<TaskResponseDto> getAllTasksByPriority(@RequestParam @Min(1) Long id) {
-        return taskService.findAllTasksByPriority(id);
+    public ResponseEntity<List<TaskResponseDto>> getAllTasksByPriority(@RequestParam @Min(1) Long id) {
+        return new ResponseEntity<>(taskService.findAllTasksByPriority(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Получить список задач по ID статуса")
     @GetMapping("/api/tasks/status")
-    public List<TaskResponseDto> getAllTasksByStatus(@RequestParam @Min(1) Long id) {
-        return taskService.findAllTasksByStatus(id);
+    public ResponseEntity<List<TaskResponseDto>> getAllTasksByStatus(@RequestParam @Min(1) Long id) {
+        return new ResponseEntity<>(taskService.findAllTasksByStatus(id), HttpStatus.OK);
     }
 }

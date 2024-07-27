@@ -1,15 +1,16 @@
 package ru.otus.spring.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Task;
+import ru.otus.spring.dto.mapper.CommentMapper;
+import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.request.CommentCreateRequestDto;
 import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
-import ru.otus.spring.dto.mapper.CommentMapper;
-import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
 import ru.otus.spring.repository.CommentRepository;
 
@@ -32,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponseDto findById(long id) {
         return commentRepository.findById(id)
                 .map(commentMapper::toDTO)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Comment with id " + id + " not found"));
     }
 
     @Override
@@ -61,12 +62,15 @@ public class CommentServiceImpl implements CommentService {
             comment.setText(commentUpdateRequestDto.getText());
             return commentMapper.toDTO(commentRepository.save(comment));
         }
-        throw new IllegalArgumentException();
+        throw new EntityNotFoundException("Comment with id = " + commentUpdateRequestDto.getId() + " not found");
     }
 
     @Transactional
     @Override
     public void deleteById(long id) {
-        commentRepository.deleteById(id);
+        if (commentRepository.existsById(id)) {
+            commentRepository.deleteById(id);
+        }
+        throw new EntityNotFoundException("Comment with id = " + id + " not found");
     }
 }

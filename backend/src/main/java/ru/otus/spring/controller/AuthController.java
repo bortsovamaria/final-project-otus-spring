@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +24,13 @@ public class AuthController {
 
     @Operation(summary = "Регистрация пользователя")
     @PostMapping("/register")
-    public JwtAuthenticationResponse register(@RequestBody @Valid RegisterRequest request) {
-        return authenticationService.register(request);
+    public ResponseEntity<JwtAuthenticationResponse> register(@RequestBody @Valid RegisterRequest request) {
+        return new ResponseEntity<>(authenticationService.register(request), HttpStatus.OK);
     }
 
     @Operation(summary = "Авторизация пользователя")
     @PostMapping("/login")
-    public JwtAuthenticationResponse login(@RequestBody @Valid LoginRequest request) {
-        return authenticationService.login(request);
+    public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody @Valid LoginRequest request) {
+        return new ResponseEntity<>(authenticationService.login(request), HttpStatus.OK);
     }
 }
