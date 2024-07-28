@@ -135,28 +135,28 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-resources-plugin</artifactId>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>Copy my react app into my Spring Boot target static folder</id>-->
-            <!--                        <phase>process-resources</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>copy-resources</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <outputDirectory>${project.basedir}/target/classes/static</outputDirectory>-->
-            <!--                            <resources>-->
-            <!--                                <resource>-->
-            <!--                                    <directory>../frontend/build</directory>-->
-            <!--                                    <filtering>true</filtering>-->
-            <!--                                </resource>-->
-            <!--                            </resources>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-resources-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>Copy my react app into my Spring Boot target static folder</id>-->
+<!--                        <phase>process-resources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-resources</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>${project.basedir}/target/classes/static</outputDirectory>-->
+<!--                            <resources>-->
+<!--                                <resource>-->
+<!--                                    <directory>../frontend/build</directory>-->
+<!--                                    <filtering>true</filtering>-->
+<!--                                </resource>-->
+<!--                            </resources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
