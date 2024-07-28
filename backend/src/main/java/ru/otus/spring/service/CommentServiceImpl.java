@@ -38,14 +38,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponseDto> findByTaskId(long taskId) {
-        TaskFullResponseDto task = taskService.findById(taskId);
+        TaskFullResponseDto task = taskService.findFullById(taskId);
         return task.getComments();
     }
 
     @Transactional
     @Override
     public CommentResponseDto insert(CommentCreateRequestDto commentCreateRequestDto) {
-        Task task = taskMapper.toFullDomain(taskService.findById(commentCreateRequestDto.getTaskId()));
+        Task task = taskMapper.toFullDomain(taskService.findFullById(commentCreateRequestDto.getTaskId()));
         Comment comment = Comment.builder()
                 .text(commentCreateRequestDto.getText())
                 .task(task)

@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.domain.*;
+import ru.otus.spring.domain.Priority;
+import ru.otus.spring.domain.Status;
+import ru.otus.spring.domain.Task;
+import ru.otus.spring.domain.User;
 import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.request.TaskRequestInsertDto;
 import ru.otus.spring.dto.request.TaskRequestUpdateDto;
@@ -35,9 +38,16 @@ public class TaskServiceImpl implements TaskService {
     private final PriorityRepository priorityRepository;
 
     @Override
-    public TaskFullResponseDto findById(long id) {
+    public TaskFullResponseDto findFullById(long id) {
         return taskRepository.findById(id)
                 .map(mapper::toFullDto)
+                .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
+    }
+
+    @Override
+    public TaskResponseDto findById(long id) {
+        return taskRepository.findById(id)
+                .map(mapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
     }
 

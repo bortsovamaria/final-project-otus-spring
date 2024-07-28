@@ -8,7 +8,9 @@ import ru.otus.spring.dto.response.TaskResponseDto;
 import java.util.List;
 
 public interface TaskService {
-    TaskFullResponseDto findById(long id);
+    TaskFullResponseDto findFullById(long id);
+
+    TaskResponseDto findById(long id);
 
     List<TaskResponseDto> findAll();
 

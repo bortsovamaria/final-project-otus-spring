@@ -31,7 +31,7 @@ public class TaskController {
     @Operation(summary = "Получить задачу по ID")
     @GetMapping("/api/tasks/{id}")
     public ResponseEntity<TaskFullResponseDto> getTaskById(@PathVariable @Min(1) Long id) {
-        return new ResponseEntity<>(taskService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(taskService.findFullById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Добавить комментарий")

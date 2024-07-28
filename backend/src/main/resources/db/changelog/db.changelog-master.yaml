@@ -7,3 +7,5 @@ databaseChangeLog:
       path: db/changelog/3.0/
   - includeAll:
       path: db/changelog/4.0/
+  - includeAll:
+      path: db/changelog/5.0/

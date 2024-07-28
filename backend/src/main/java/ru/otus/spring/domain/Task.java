@@ -58,6 +58,9 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    private List<Attachment> attachments = new ArrayList<>();
+
     public Task(Long id, String title, String description, User createdBy, User updatedBy, User assignedTo, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;

@@ -33,4 +33,6 @@ public class TaskFullResponseDto {
     private LocalDateTime updatedAt;
 
     private List<CommentResponseDto> comments;
+
+    private List<AttachmentResponseDto> attachments;
 }
