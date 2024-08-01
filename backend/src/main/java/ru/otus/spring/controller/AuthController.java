@@ -28,7 +28,7 @@ public class AuthController {
         return new ResponseEntity<>(authenticationService.register(request), HttpStatus.OK);
     }
 
-    @Operation(summary = "Авторизация пользователя")
+    @Operation(summary = "Аутентификация пользователя")
     @PostMapping("/login")
     public ResponseEntity<JwtAuthenticationResponse> login(@RequestBody @Valid LoginRequest request) {
         return new ResponseEntity<>(authenticationService.login(request), HttpStatus.OK);

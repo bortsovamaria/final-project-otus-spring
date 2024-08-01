@@ -7,15 +7,15 @@ public enum StatusName {
     TEST(4),
     PRODUCTION(5);
 
-    public final long value;
+    private final long value;
 
     StatusName(final long value) {
         this.value = value;
     }
 
     public static StatusName getValue(long value) {
-        for(StatusName e: StatusName.values()) {
-            if(e.value == value) {
+        for (StatusName e : StatusName.values()) {
+            if (e.value == value) {
                 return e;
             }
         }

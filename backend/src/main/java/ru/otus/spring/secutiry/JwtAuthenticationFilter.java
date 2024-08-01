@@ -22,47 +22,43 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
+
     public static final String HEADER_NAME = "Authorization";
+
     private final JwtService jwtService;
+
     private final UserService userService;
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
-
-        // Получаем токен из заголовка
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        // Обрезаем префикс и получаем имя пользователя из токена
-        var jwt = authHeader.substring(BEARER_PREFIX.length());
-        var username = jwtService.extractUserName(jwt);
+        var username = jwtService.extractUserName(getJwt(authHeader));
 
         if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService
                     .loadUserByUsername(username);
-
-            // Если токен валиден, то аутентифицируем пользователя
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            if (jwtService.isTokenValid(getJwt(authHeader), userDetails)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
-
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
-
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private static String getJwt(String authHeader) {
+        return authHeader.substring(BEARER_PREFIX.length());
     }
 }

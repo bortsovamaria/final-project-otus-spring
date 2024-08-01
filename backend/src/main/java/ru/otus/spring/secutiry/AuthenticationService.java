@@ -12,8 +12,11 @@ import ru.otus.spring.service.UserService;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserService userService;
+
     private final JwtService jwtService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationResponse register(RegisterRequest request) {

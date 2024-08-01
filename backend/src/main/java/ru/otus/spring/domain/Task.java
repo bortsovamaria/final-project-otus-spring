@@ -1,10 +1,26 @@
 package ru.otus.spring.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,15 +76,4 @@ public class Task {
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
     private List<Attachment> attachments = new ArrayList<>();
-
-    public Task(Long id, String title, String description, User createdBy, User updatedBy, User assignedTo, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.assignedTo = assignedTo;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 }

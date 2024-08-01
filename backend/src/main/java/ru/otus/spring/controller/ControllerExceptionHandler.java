@@ -30,7 +30,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(FailParseFileException.class)
-    public ResponseEntity<ErrorMessage> handleFileUploadException(MaxUploadSizeExceededException e, WebRequest request) {
+    public ResponseEntity<ErrorMessage> handleFileUploadException(FailParseFileException e, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now(), e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorMessage, HttpStatus.EXPECTATION_FAILED);

@@ -6,7 +6,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.spring.dto.request.CommentCreateRequestDto;
 import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
@@ -35,13 +42,15 @@ public class CommentController {
 
     @Operation(summary = "Добавить комментарий")
     @PostMapping("/api/comments")
-    public ResponseEntity<CommentResponseDto> insertComment(@RequestBody @Valid CommentCreateRequestDto commentRequestDto) {
+    public ResponseEntity<CommentResponseDto> insertComment(
+            @RequestBody @Valid CommentCreateRequestDto commentRequestDto) {
         return new ResponseEntity<>(commentService.insert(commentRequestDto), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Редактировать комментарий по ID")
     @PatchMapping("/api/comments")
-    public ResponseEntity<CommentResponseDto> updateComment(@RequestBody @Valid CommentUpdateRequestDto commentUpdateRequestDto) {
+    public ResponseEntity<CommentResponseDto> updateComment(
+            @RequestBody @Valid CommentUpdateRequestDto commentUpdateRequestDto) {
         return new ResponseEntity<>(commentService.update(commentUpdateRequestDto), HttpStatus.OK);
     }
 

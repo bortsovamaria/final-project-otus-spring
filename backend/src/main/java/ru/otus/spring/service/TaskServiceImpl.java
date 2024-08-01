@@ -18,6 +18,8 @@ import ru.otus.spring.repository.PriorityRepository;
 import ru.otus.spring.repository.StatusRepository;
 import ru.otus.spring.repository.TaskRepository;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +54,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public boolean existById(long id) {
+        return taskRepository.existsById(id);
+    }
+
+    @Override
     public List<TaskResponseDto> findAll() {
         return taskRepository.findAll()
                 .stream()
@@ -65,59 +72,24 @@ public class TaskServiceImpl implements TaskService {
         User assignedTo = userService.findById(taskRequestInsertDto.getAssignedTo());
         Status status = statusRepository.findById(taskRequestInsertDto.getStatus())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Status with id " + taskRequestInsertDto.getStatus() + " not found"));
+                        new EntityNotFoundException(
+                                "Status with id " + taskRequestInsertDto.getStatus() + " not found"));
         Priority priority = priorityRepository.findById(taskRequestInsertDto.getPriority())
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Priority with id " + taskRequestInsertDto.getStatus() + " not found"));
-        Task task = Task.builder()
-                .title(taskRequestInsertDto.getTitle())
-                .description(taskRequestInsertDto.getDescription())
-                .createdBy(currentUser)
-                .updatedBy(currentUser)
-                .assignedTo(assignedTo)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .status(status)
-                .priority(priority)
-                .build();
+                        new EntityNotFoundException(
+                                "Priority with id " + taskRequestInsertDto.getStatus() + " not found"));
+        Task task = createNewTask(taskRequestInsertDto, currentUser, assignedTo, status, priority);
         return mapper.toDto(taskRepository.save(task));
     }
 
     @Override
     public TaskResponseDto update(long id, TaskRequestUpdateDto taskRequestUpdateDto) {
         Optional<Task> taskOpt = taskRepository.findById(id);
-        if (taskOpt.isPresent()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            User currentUser = userService.findByUsername(authentication.getName());
-            User assignedTo = userService.findById(taskRequestUpdateDto.getAssignedTo());
-            Status status = statusRepository.findById(taskRequestUpdateDto.getStatus().getId())
-                    .orElseThrow(() ->
-                            new EntityNotFoundException("Status with id " + taskRequestUpdateDto.getStatus() + " not found"));
-            Priority priority = priorityRepository.findById(taskRequestUpdateDto.getPriority().getId())
-                    .orElseThrow(() ->
-                            new EntityNotFoundException("Priority with id " + taskRequestUpdateDto.getStatus() + " not found"));
-            Task task = taskOpt.get();
-            if (!isEmpty(taskRequestUpdateDto.getTitle())) {
-                task.setTitle(taskRequestUpdateDto.getTitle());
-            }
-            if (!isEmpty(taskRequestUpdateDto.getDescription())) {
-                task.setDescription(taskRequestUpdateDto.getDescription());
-            }
-            if (!isEmpty(taskRequestUpdateDto.getAssignedTo())) {
-                task.setAssignedTo(assignedTo);
-            }
-            if (!isEmpty(taskRequestUpdateDto.getStatus())) {
-                task.setStatus(status);
-            }
-            if (!isEmpty(taskRequestUpdateDto.getPriority())) {
-                task.setPriority(priority);
-            }
-            task.setUpdatedBy(currentUser);
-            task.setUpdatedAt(LocalDateTime.now());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Task task = updateTask(id, taskRequestUpdateDto, authentication, taskOpt);
 
-            return mapper.toDto(taskRepository.save(task));
-        }
-        throw new IllegalArgumentException("Task not found with id = " + id);
+        return mapper.toDto(taskRepository.save(task));
+
     }
 
     @Override
@@ -168,5 +140,74 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    private static Task createNewTask(TaskRequestInsertDto taskRequestInsertDto,
+                                      User currentUser,
+                                      User assignedTo,
+                                      Status status,
+                                      Priority priority) {
+        return Task.builder()
+                .title(taskRequestInsertDto.getTitle())
+                .description(taskRequestInsertDto.getDescription())
+                .createdBy(currentUser)
+                .updatedBy(currentUser)
+                .assignedTo(assignedTo)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .status(status)
+                .priority(priority)
+                .build();
+    }
+
+    private Task updateTask(Long id, TaskRequestUpdateDto taskRequestUpdateDto,
+                            Authentication authentication,
+                            Optional<Task> taskOpt) {
+        if (taskOpt.isPresent()) {
+            User currentUser = userService.findByUsername(authentication.getName());
+            Task task = taskOpt.get();
+            updateFields(taskRequestUpdateDto, task, currentUser);
+            return task;
+        }
+        throw new IllegalArgumentException("Task not found with id = " + id);
+    }
+
+    private void updateFields(TaskRequestUpdateDto taskRequestUpdateDto,
+                              Task task, User currentUser) {
+
+        User assignedTo = userService.findById(taskRequestUpdateDto.getAssignedTo());
+        Status status = getStatus(taskRequestUpdateDto);
+        Priority priority = getPriority(taskRequestUpdateDto);
+        if (!isEmpty(taskRequestUpdateDto.getTitle())) {
+            task.setTitle(taskRequestUpdateDto.getTitle());
+        }
+        if (!isEmpty(taskRequestUpdateDto.getDescription())) {
+            task.setDescription(taskRequestUpdateDto.getDescription());
+        }
+        if (!isEmpty(taskRequestUpdateDto.getAssignedTo())) {
+            task.setAssignedTo(assignedTo);
+        }
+        if (!isEmpty(taskRequestUpdateDto.getStatus())) {
+            task.setStatus(status);
+        }
+        if (!isEmpty(taskRequestUpdateDto.getPriority())) {
+            task.setPriority(priority);
+        }
+        task.setUpdatedBy(currentUser);
+        task.setUpdatedAt(LocalDateTime.now());
+    }
+
+    private Priority getPriority(TaskRequestUpdateDto taskRequestUpdateDto) {
+        return priorityRepository.findById(taskRequestUpdateDto.getPriority().getId())
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Priority with id " + taskRequestUpdateDto.getStatus() + " not found"));
+    }
+
+    private Status getStatus(TaskRequestUpdateDto taskRequestUpdateDto) {
+        return statusRepository.findById(taskRequestUpdateDto.getStatus().getId())
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Status with id " + taskRequestUpdateDto.getStatus() + " not found"));
     }
 }

@@ -12,6 +12,8 @@ public interface TaskService {
 
     TaskResponseDto findById(long id);
 
+    boolean existById(long id);
+
     List<TaskResponseDto> findAll();
 
     List<TaskResponseDto> findAllByAssignedToId(Long assignedToId);

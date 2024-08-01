@@ -12,4 +12,6 @@ public interface AttachmentService {
     AttachmentFullResponseDto findById(Long id);
 
     List<AttachmentResponseDto> findByTaskId(Long id);
+
+    void deleteById(long id);
 }

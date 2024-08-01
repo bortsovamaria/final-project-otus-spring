@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.User;
+import ru.otus.spring.exceptions.EntityAlreadyExists;
 import ru.otus.spring.repository.UserRepository;
 
 import java.util.List;
@@ -56,8 +57,7 @@ public class UserServiceImpl implements UserService {
 
     public void create(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            // Заменить на свои исключения
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new EntityAlreadyExists("Пользователь с таким именем уже существует");
         }
 
         save(user);

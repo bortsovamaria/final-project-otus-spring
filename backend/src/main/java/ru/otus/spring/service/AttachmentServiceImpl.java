@@ -11,11 +11,14 @@ import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.response.AttachmentFullResponseDto;
 import ru.otus.spring.dto.response.AttachmentResponseDto;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
+import ru.otus.spring.dto.response.TaskResponseDto;
+import ru.otus.spring.exceptions.EntityNotFoundException;
 import ru.otus.spring.exceptions.FailParseFileException;
 import ru.otus.spring.repository.AttachmentRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public AttachmentFullResponseDto store(MultipartFile file, Integer taskId) {
         Task task = taskMapper.toDomain(taskService.findById(taskId));
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
         Attachment attachment;
         try {
@@ -56,5 +59,13 @@ public class AttachmentServiceImpl implements AttachmentService {
     public List<AttachmentResponseDto> findByTaskId(Long taskId) {
         TaskFullResponseDto task = taskService.findFullById(taskId);
         return task.getAttachments();
+    }
+
+    @Override
+    public void deleteById(long id) {
+        if (taskService.existById(id)) {
+            attachmentRepository.deleteById(id);
+        }
+        throw new EntityNotFoundException("Task with id " + id + " not found");
     }
 }

@@ -1,14 +1,20 @@
 package ru.otus.spring.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import ru.otus.spring.domain.Priority;
 import ru.otus.spring.domain.Status;
 import ru.otus.spring.domain.User;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@EqualsAndHashCode
+@Builder
 @AllArgsConstructor
 @Getter
 public class TaskFullResponseDto {
@@ -22,11 +28,11 @@ public class TaskFullResponseDto {
 
     private Priority priority;
 
-    private User createdBy;
+    private UserDto createdBy;
 
-    private User updatedBy;
+    private UserDto updatedBy;
 
-    private User assignedTo;
+    private UserDto assignedTo;
 
     private LocalDateTime createdAt;
 
