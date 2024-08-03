@@ -7,8 +7,6 @@ import lombok.Getter;
 import ru.otus.spring.domain.Priority;
 import ru.otus.spring.domain.Status;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode

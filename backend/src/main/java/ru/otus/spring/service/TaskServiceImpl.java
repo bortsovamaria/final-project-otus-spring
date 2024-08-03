@@ -18,8 +18,6 @@ import ru.otus.spring.repository.PriorityRepository;
 import ru.otus.spring.repository.StatusRepository;
 import ru.otus.spring.repository.TaskRepository;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
