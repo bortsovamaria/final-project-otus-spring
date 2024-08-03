@@ -1,6 +1,5 @@
 package ru.otus.spring.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +11,7 @@ import ru.otus.spring.dto.request.CommentCreateRequestDto;
 import ru.otus.spring.dto.request.CommentUpdateRequestDto;
 import ru.otus.spring.dto.response.CommentResponseDto;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
+import ru.otus.spring.exceptions.EntityNotFoundException;
 import ru.otus.spring.repository.CommentRepository;
 
 import java.util.List;

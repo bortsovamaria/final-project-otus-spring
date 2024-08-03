@@ -1,6 +1,5 @@
 package ru.otus.spring.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +13,7 @@ import ru.otus.spring.dto.request.TaskRequestInsertDto;
 import ru.otus.spring.dto.request.TaskRequestUpdateDto;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
 import ru.otus.spring.dto.response.TaskResponseDto;
+import ru.otus.spring.exceptions.EntityNotFoundException;
 import ru.otus.spring.repository.PriorityRepository;
 import ru.otus.spring.repository.StatusRepository;
 import ru.otus.spring.repository.TaskRepository;

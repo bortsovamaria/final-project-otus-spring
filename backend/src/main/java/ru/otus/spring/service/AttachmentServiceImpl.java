@@ -11,7 +11,6 @@ import ru.otus.spring.dto.mapper.TaskMapper;
 import ru.otus.spring.dto.response.AttachmentFullResponseDto;
 import ru.otus.spring.dto.response.AttachmentResponseDto;
 import ru.otus.spring.dto.response.TaskFullResponseDto;
-import ru.otus.spring.dto.response.TaskResponseDto;
 import ru.otus.spring.exceptions.EntityNotFoundException;
 import ru.otus.spring.exceptions.FailParseFileException;
 import ru.otus.spring.repository.AttachmentRepository;
@@ -63,9 +62,9 @@ public class AttachmentServiceImpl implements AttachmentService {
 
     @Override
     public void deleteById(long id) {
-        if (taskService.existById(id)) {
+        if (attachmentRepository.existsById(id)) {
             attachmentRepository.deleteById(id);
         }
-        throw new EntityNotFoundException("Task with id " + id + " not found");
+        throw new EntityNotFoundException("Attachment with id " + id + " not found");
     }
 }

@@ -49,12 +49,11 @@ public class AttachmentController {
         attachmentService.store(file, taskId);
         return ResponseEntity.status(HttpStatus.OK).body(new AttachmentResponse(file.getOriginalFilename(),
                 "Uploaded the file successfully: " + file.getOriginalFilename()));
-
     }
 
-    @Operation(summary = "Удалить комментарий по ID")
+    @Operation(summary = "Удалить файл по ID")
     @DeleteMapping("/api/attachments/{id}")
-    public ResponseEntity<Void> deleteCommentById(@PathVariable long id) {
+    public ResponseEntity<Void> deleteAttachmentById(@PathVariable long id) {
         attachmentService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
