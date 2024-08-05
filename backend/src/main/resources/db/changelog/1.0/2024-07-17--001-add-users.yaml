@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-03-11--create-table-users
+      author: mbortsova
+      changes:
+      - createTable:
+          tableName: users
+          columns:
+            - column:
+                name: id
+                type: bigint
+                autoIncrement: true
+                constraints:
+                  nullable: false
+                  primaryKey: true
+                  primaryKeyName: pk_user
+            - column:
+                name: full_name
+                type: varchar(255)
+            - column:
+                name: username
+                type: varchar(255)
+            - column:
+                name: password
+                type: varchar(255)
+            - column:
+                name: email
+                type: varchar(255)
+
+  - changeSet:
+      id: 2024-03-11--create-table-roles
+      author: mbortsova
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_role
+              - column:
+                  name: name
+                  type: varchar(255)
+  - changeSet:
+      id: 2024-03-14--001-create-table-user_roles
+      author: mbortsova
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_user_roles_user_id
+                    references: users(id)
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_user_roles_role_id
+                    references: roles(id)

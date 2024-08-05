@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-21--001-add-comments
+      author: mbortsova
+      changes:
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_comment
+              - column:
+                  name: text
+                  type: varchar(255)
+              - column:
+                  name: task_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_comment
+                    references: tasks(id)

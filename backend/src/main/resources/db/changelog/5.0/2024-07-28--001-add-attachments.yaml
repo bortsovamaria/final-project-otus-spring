@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-28--001-add-attachments
+      author: mbortsova
+      changes:
+        - createTable:
+            tableName: attachments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_attachment
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: type
+                  type: varchar(255)
+              - column:
+                  name: data
+                  type: bytea
+              - column:
+                  name: task_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_attachment
+                    references: tasks(id)

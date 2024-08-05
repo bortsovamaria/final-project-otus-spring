@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5429/task_tracker
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: public
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+
+logging:
+  level:
+    org.hibernate:
+      type.descriptor.sql.BasicBinder: TRACE
+      SQL: DEBUG
+
+token:
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
